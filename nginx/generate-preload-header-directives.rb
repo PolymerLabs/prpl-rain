@@ -9,7 +9,7 @@ require 'json'
 data = JSON.parse(ARGF.read)
 
 data.keys.sort.each do |url|
-  regexp_url = url.gsub(/\./, '\\.').gsub(/\*+/,'.*')
+  regexp_url = url.gsub(/\./, '\\.').gsub(/\*+/,'.*').gsub(/__NOTDOT__/, '[^.]*')
   puts "if ($request_uri ~ ^#{regexp_url}$) {"
   data[url].each do |header|
     puts "add_header Link \"#{header}\";"

@@ -13,7 +13,7 @@ input.each do |line|
   when :out_location_block
     case line
     when /<LocationMatch "?([^">]*)"?>/
-      location = $1.gsub(/\^|\$/,'').gsub(/\.\*?\+?/,'*')
+      location = $1.gsub(/\[\^\.\]\*/, '__NOTDOT__').gsub(/\^|\$/,'').gsub(/\.\*?\+?/,'*')
       input_state = :in_location_block
     when /<Location "?([^">]*)"?>/
       location = $1

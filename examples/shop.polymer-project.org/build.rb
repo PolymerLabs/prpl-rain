@@ -5,7 +5,7 @@
 # This file generates the link header directives from the LocationMatch
 # directives in the conf files I found in our /etc/apache2/push-conf folder,
 # generates server config for shop.polymer-project.org and then builds the
-# news app and copies configs into an .nginx folder in the unbundled build
+# news app and copies configs into an .nginx folder in the es6-unbundled build
 # output.  This makes that folder suitable to upload as is.
 
 require 'erb'
@@ -36,20 +36,20 @@ cd <%= repo_dir %>
 bower install
 polymer build
 
-mkdir -p build/unbundled/.nginx/location-includes
-mkdir -p build/unbundled/.nginx/path-includes
+mkdir -p build/es6-unbundled/.nginx/location-includes
+mkdir -p build/es6-unbundled/.nginx/path-includes
 
 <%= root_dir %>/nginx/generate-server-config.rb shop.polymer-project.org > \
-    build/unbundled/.nginx/shop.polymer-project.org.conf
+    build/es6-unbundled/.nginx/shop.polymer-project.org.conf
 
 cat <%= apache_confs %> \
     | <%= root_dir %>/apache/extract-url-preload-headers.rb \
     | <%= root_dir %>/core/preload-urls-to-link-header-values.rb \
     | <%= root_dir %>/nginx/generate-preload-header-directives.rb > \
-    build/unbundled/.nginx/location-includes/link-headers.conf
+    build/es6-unbundled/.nginx/location-includes/link-headers.conf
 
 
-echo "1. Copy the <%= repo_dir %>/build/unbundled folder to the server at <%= document_root %>"
+echo "1. Copy the <%= repo_dir %>/build/es6-unbundled folder to the server at <%= document_root %>"
 echo "2. On server: sudo chown -R root <%= document_root %>"
 echo "3. On server: sudo chgrp -R root <%= document_root %>"
 echo "4. On server: sudo ln -s <%= document_root %>/shop.polymer-project.org.conf /etc/nginx/sites-enabled/shop.polymer-project.org.conf"
